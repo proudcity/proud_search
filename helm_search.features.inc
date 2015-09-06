@@ -29,7 +29,7 @@ function helm_search_views_api($module = NULL, $api = NULL) {
 function helm_search_default_search_api_index() {
   $items = array();
   $items['helm_search_node'] = entity_import('search_api_index', '{
-    "name" : "Helm Search Node",
+    "name" : "Proud Search Node",
     "machine_name" : "helm_search_node",
     "description" : null,
     "server" : "helm_search",
@@ -141,7 +141,7 @@ function helm_search_default_search_api_live_results_search() {
 function helm_search_default_search_api_server() {
   $items = array();
   $items['helm_search'] = entity_import('search_api_server', '{
-    "name" : "Helm Search",
+    "name" : "Proud Search",
     "machine_name" : "helm_search",
     "description" : "",
     "class" : "search_api_db_service",

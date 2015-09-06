@@ -1,7 +1,7 @@
-name = Helm Search
+name = Proud Search
 description = Installs a base search using the Search API suite
 core = 7.x
-package = Helm
+package = Proud
 dependencies[] = defaultconfig
 dependencies[] = facetapi
 dependencies[] = page_manager
