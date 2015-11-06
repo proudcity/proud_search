@@ -70,9 +70,10 @@ function proud_search_theme() {
     'proud_search_form' => array(
       'template' => $path . 'proud-search-form',
       'variables' => array(
-        'placeholder' => 'How may we help you?',
+        'placeholder' => variable_get('proud_search_placeholder', t('How may we help you?')),
         'action' => url(variable_get('proud_search_url', 'search')),
         'name' => variable_get('proud_search_key', 'term'),
+        'provider' => variable_get('proud_search_provider', 'google'),
       ),
     ),
     'proud_search_suggestions' => array(
@@ -91,7 +92,7 @@ function proud_search_theme() {
 }
 
 
-function template_preprocess_proud_search_form() {
+function template_preprocess_proud_search_form(&$variables) {
   $settings = array(
     'render_in_overlay' => $GLOBALS['PROUD_SEARCH_RENDERED'],
     'endpoint' => url('proud_search.json'),
@@ -116,6 +117,10 @@ function template_preprocess_proud_search_form() {
   $path = drupal_get_path('module', 'proud_search');
   drupal_add_js($path .'/js/jquery.typewatch.js', 'file');
   drupal_add_js($path .'/js/proud-search.js', 'file');
+
+  dpm($_REQUEST[$variables['name']]);
+
+  $variables['query'] = empty($_REQUEST[$variables['name']]) ? '' : $_REQUEST[$variables['name']];
 }
 
 
@@ -127,7 +132,25 @@ function template_preprocess_proud_search_suggestions(&$variables) {
 
 
 function template_preprocess_proud_search_google_results(&$variables) {
-  $variables['query'] = $_REQUEST[variable_get('proud_search_key', 'term')];
-  dpm($variables);
+  $variables['key'] = variable_get('proud_search_key', 'term');
+  $cx = variable_get('proud_search_google_cx', NULL);
+  $variables['cx'] = $cx;
+
+  if (!empty($cx)) {
+    $js = "(function() {
+      var cx = '$cx';
+      var gcse = document.createElement('script');
+      gcse.type = 'text/javascript';
+      gcse.async = true;
+      gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+          '//cse.google.com/cse.js?cx=' + cx;
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(gcse, s);
+    })();";
+    drupal_add_js($js, array('type' => 'inline', 'scope' => 'header', 'weight' => 5));
+  }
+  else {
+    drupal_set_message(t('You need to set up a !cse.', array('!cse' => l('Google Custom Search engine key', 'admin/proud/search'))), 'error');
+  }
 }
 
