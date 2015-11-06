@@ -4,4 +4,130 @@
  * Code for the Proud Search feature.
  */
 
+
 include_once 'proud_search.features.inc';
+
+/**
+ * Implements hook_permission().
+ */
+function proud_search_permission() {
+  return array(
+    "configure proud_search" => array(
+      'title' => t('Configure Proud Search settings'),
+    ),
+    
+  );
+}
+
+/**
+ * Implements hook_menu().
+ */
+function proud_search_menu() {
+  $items['admin/proud/search'] = array(
+    'title' => 'Proud search settings',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('configure proud_search'),
+    'page arguments' => array('proud_search_admin_form'),
+    'type' => MENU_NORMAL_ITEM,
+    'file' => 'proud_search.admin.inc',
+  );
+
+  return $items;
+}
+
+
+
+/**
+ * Implements hook_ctools_plugin_directory().
+ */
+function proud_search_ctools_plugin_directory($owner, $plugin_type) {
+  // Call the various ctools plugin types.
+  $modules = array('panels', 'ctools');
+  if (in_array($owner, $modules) && !empty($plugin_type) && ($plugin_type == 'content_types' || $plugin_type == 'access' || $plugin_type == 'layouts')) {
+    return 'plugins/' . $plugin_type;
+  }
+}
+
+
+/**
+ * Implements hook_proud_navbar_overlay_search_alter().
+ */
+function proud_search_proud_navbar_overlay_search_alter(&$search) {
+  if(!$GLOBALS['PROUD_SEARCH_RENDERED']) {
+    //$search['#markup'] = // the search form;
+  }
+}
+
+
+/******************************* THEME ***************************** */
+
+/**
+ * Implements hook_theme().
+ */
+function proud_search_theme() {
+  $path = 'templates/';
+  return array(
+    'proud_search_form' => array(
+      'template' => $path . 'proud-search-form',
+      'variables' => array(
+        'placeholder' => 'How may we help you?',
+        'action' => url(variable_get('proud_search_url', 'search')),
+        'name' => variable_get('proud_search_key', 'q'),
+      ),
+    ),
+    'proud_search_suggestions' => array(
+      'template' => $path . 'proud-search-suggestions',
+      'variables' => array(
+        'query' => '',
+      ),
+    ),
+    'proud_search_google_results' => array(
+      'template' => $path . 'proud-search-google-results',
+      'variables' => array(
+        'query' => '',
+      ),
+    ),
+  );
+}
+
+
+function template_preprocess_proud_search_form() {
+  $settings = array(
+    'render_in_overlay' => $GLOBALS['PROUD_SEARCH_RENDERED'],
+    'endpoint' => url('proud_search.json'),
+    'max_results' => 10,
+    'icons' => array(
+      'agency' => 'fa-university',
+      'page' => 'fa-file-text-o',
+      'faq' => 'fa-question',
+      'event' => 'fa-calendar',
+      'landingpage' => 'fa-file-o',
+      'news' => 'fa-newspaper-o',
+      'payment' => 'fa-credit-card',
+      'job' => 'fa-briefcase',
+    ),
+    '311_types' => array(
+      'faq',
+      'payment',
+    ),
+  );
+  drupal_add_js(array('proud_search' => $settings), 'setting');
+
+  $path = drupal_get_path('module', 'proud_search');
+  drupal_add_js($path .'/js/jquery.typewatch.js', 'file');
+  drupal_add_js($path .'/js/proud-search.js', 'file');
+}
+
+
+
+function template_preprocess_proud_search_suggestions(&$variables) {
+
+  drupal_add_js($path .'/js/proud-search.js', 'file');
+}
+
+
+function template_preprocess_proud_search_google_results(&$variables) {
+  $variables['query'] = $_REQUEST[variable_get('proud_search_key', 'q')];
+  dpm($variables);
+}
+
