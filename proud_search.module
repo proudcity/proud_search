@@ -72,7 +72,7 @@ function proud_search_theme() {
       'variables' => array(
         'placeholder' => 'How may we help you?',
         'action' => url(variable_get('proud_search_url', 'search')),
-        'name' => variable_get('proud_search_key', 'q'),
+        'name' => variable_get('proud_search_key', 'term'),
       ),
     ),
     'proud_search_suggestions' => array(
@@ -127,7 +127,7 @@ function template_preprocess_proud_search_suggestions(&$variables) {
 
 
 function template_preprocess_proud_search_google_results(&$variables) {
-  $variables['query'] = $_REQUEST[variable_get('proud_search_key', 'q')];
+  $variables['query'] = $_REQUEST[variable_get('proud_search_key', 'term')];
   dpm($variables);
 }
 
