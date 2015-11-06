@@ -118,8 +118,6 @@ function template_preprocess_proud_search_form(&$variables) {
   drupal_add_js($path .'/js/jquery.typewatch.js', 'file');
   drupal_add_js($path .'/js/proud-search.js', 'file');
 
-  dpm($_REQUEST[$variables['name']]);
-
   $variables['query'] = empty($_REQUEST[$variables['name']]) ? '' : $_REQUEST[$variables['name']];
 }
 
