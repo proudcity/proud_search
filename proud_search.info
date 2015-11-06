@@ -3,8 +3,12 @@ description = Autocomplete search with Search API with a fallback to Google Sear
 core = 7.x
 package = Proud
 version = 7.x-1.0-beta1
-dependencies[] = search_api
+dependencies[] = ctools
+dependencies[] = entity
+dependencies[] = panelizer
 dependencies[] = restws_search_api
+dependencies[] = search_api
+dependencies[] = search_api_db
 features[features_api][] = api:2
 features[search_api_index][] = proud_search
-
+features[search_api_server][] = db_server
