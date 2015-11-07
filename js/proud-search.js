@@ -50,18 +50,27 @@
         captureLength: 2
       }
 
+      var $body = $('body');
+
       $("#proud-search-input").typeWatch( options );
 
+      $(".panel-display #proud-search-input").once('proud-search', function() {
+        $(this).on('focus', function() {
+          if(!$body.hasClass('search-active')) {
+            Drupal.proudNav.triggerOverlay('search');
+          }
+        });
+      });
 
-
-      $('body').on('proudNavClick', function(event) {
+      $body.on('proudNavClick', function(event) {
         switch(event['event']) {
           case 'search':
-            if(settings.proud_search.render_in_overlay) {
-              event.callback(null, false, 'search-id');
+            var $searchForm = $('#wrapper-search');
+            if(!settings.proud_search.render_in_overlay) {
+              event.callback(true, 'wrapper-search');
             }
             else {
-              event.callback(null, true);
+              event.callback(true);
             }
             break;
         }
