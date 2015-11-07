@@ -5,25 +5,6 @@
  */
 
 /**
- * Implements hook_ctools_plugin_api().
- */
-function proud_search_ctools_plugin_api($module = NULL, $api = NULL) {
-  if ($module == "facetapi" && $api == "facetapi_defaults") {
-    return array("version" => "1");
-  }
-  if ($module == "page_manager" && $api == "pages_default") {
-    return array("version" => "1");
-  }
-}
-
-/**
- * Implements hook_views_api().
- */
-function proud_search_views_api($module = NULL, $api = NULL) {
-  return array("api" => "3.0");
-}
-
-/**
  * Implements hook_default_search_api_index().
  */
 function proud_search_default_search_api_index() {
@@ -32,7 +13,7 @@ function proud_search_default_search_api_index() {
     "name" : "Proud Search",
     "machine_name" : "proud_search",
     "description" : null,
-    "server" : "db_server",
+    "server" : null,
     "item_type" : "node",
     "options" : {
       "datasource" : { "bundles" : [] },
@@ -144,8 +125,29 @@ function proud_search_default_search_api_index() {
         }
       }
     },
-    "enabled" : "1",
+    "enabled" : "0",
     "read_only" : "0"
+  }');
+  return $items;
+}
+
+/**
+ * Implements hook_default_search_api_server().
+ */
+function proud_search_default_search_api_server() {
+  $items = array();
+  $items['db_server'] = entity_import('search_api_server', '{
+    "name" : "DB server",
+    "machine_name" : "db_server",
+    "description" : "",
+    "class" : "search_api_db_service",
+    "options" : {
+      "database" : "default:default",
+      "min_chars" : "2",
+      "partial_matches" : 1,
+      "indexes" : []
+    },
+    "enabled" : "1"
   }');
   return $items;
 }
