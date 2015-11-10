@@ -42,7 +42,7 @@ function proud_search_ctools_plugin_directory($owner, $plugin_type) {
  */
 function proud_search_proud_navbar_overlay_search_alter(&$search) {
   if(!$GLOBALS['PROUD_SEARCH_RENDERED']) {
-    //$search['#markup'] = // the search form;
+    $search['#markup'] = theme('proud_search_form');
   }
 }
 
@@ -82,7 +82,7 @@ function proud_search_theme() {
 
 function template_preprocess_proud_search_form(&$variables) {
   $settings = array(
-    'render_in_overlay' => $GLOBALS['PROUD_SEARCH_RENDERED'],
+    'render_in_overlay' => !$GLOBALS['PROUD_SEARCH_RENDERED'],
     'endpoint' => url('proud_search.json'),
     'max_results' => 10,
     'icons' => array(
