@@ -11,7 +11,5 @@
     <button type="submit" value="Go" class="btn btn-primary btn-lg" id="proud-search-submit"><i class="fa fa-search"></i></button>
   </span>
 </div>
-
+<ul id="proud-search-autocomplete" class="search-autosuggest"></ul>
 </form>
-
-<ul id="proud-search-autocomplete" class="search-autosuggest"></u;>

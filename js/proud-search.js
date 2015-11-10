@@ -31,7 +31,9 @@
                     //}
                   }).prependTo($item);
                 }
-                $item.appendTo($wrapper);
+                if($item) {
+                  $item.appendTo($wrapper);
+                }
 
               });
             }
