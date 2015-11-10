@@ -8,25 +8,13 @@
 include_once 'proud_search.features.inc';
 
 /**
- * Implements hook_permission().
- */
-function proud_search_permission() {
-  return array(
-    "configure proud_search" => array(
-      'title' => t('Configure Proud Search settings'),
-    ),
-    
-  );
-}
-
-/**
  * Implements hook_menu().
  */
 function proud_search_menu() {
   $items['admin/proud/search'] = array(
     'title' => 'Proud search settings',
     'page callback' => 'drupal_get_form',
-    'access arguments' => array('configure proud_search'),
+    'access arguments' => array('configure proud'),
     'page arguments' => array('proud_search_admin_form'),
     'type' => MENU_NORMAL_ITEM,
     'file' => 'proud_search.admin.inc',
