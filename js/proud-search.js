@@ -69,7 +69,10 @@
           case 'search':
             var $searchForm = $('#wrapper-search');
             if(!settings.proud_search.render_in_overlay) {
-              event.callback(true, 'wrapper-search');
+              var offset = window.matchMedia('(max-width: 481px)').matches
+                         ? 0
+                         : 100;
+              event.callback(true, 'wrapper-search', offset);
             }
             else {
               event.callback(true);
