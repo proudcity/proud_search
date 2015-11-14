@@ -21,14 +21,29 @@
                     //if (settings.proud_search.311_types.indexOf(item.type) != -1){
                       switch (item.type) {
                         case 'faq':
-                          window.location.hash = '';
+                        case 'payment':
+                        case 'report':
+                          var data, hash;
+                          if(item.type == 'faq') {
+                            data = 'answers';
+                            hash = '/' + item['field_faq_category'][0]['id'] + '/' + item.nid; 
+                          }
+                          if(item.type == 'payment') {
+                            data = 'payments';
+                            hash = '/' + item.nid; 
+                          }
+                          if(data) {
+                            Drupal.proudNav.triggerOverlay(data, hash);
+                          }
+                          e.preventDefault();
                           break;
-                        case '':
-                          window.location.hash = 'payment/' + item.nid;
+
+                        default:
+                          if(item.url) {
+                            window.location = item.url;
+                          }
                           break;
                       }
-                      e.preventDefault();
-                    //}
                   }).prependTo($item);
                 }
                 if($item) {
